@@ -15,7 +15,9 @@ using System.IO;
 using System.Diagnostics;
 
 
-public class LevelNumber
+namespace WWTBAM 
+{
+    public class LevelNumber
     {
         int amount;
         LevelNumber next;
@@ -70,3 +72,4 @@ public class LevelNumber
         }  
         
     }
+}

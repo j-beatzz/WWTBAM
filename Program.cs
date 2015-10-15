@@ -14,109 +14,112 @@ using System;
 using System.IO;
 using System.Diagnostics;
 
-
-class Program
+namespace WWTBAM 
 {
-    static void Main()
+    class Program
     {
-        int count = 0;
-        Console.WriteLine("Who Wants to A Millionaire");
-        Console.Write("Enter your name: ");
-        string playerName = Console.ReadLine();
-        string userInput;
-        
-        bool stillInTheGame = true;
-        bool walkAway = false;
-                
-        Player theplayer = new Player(playerName);
-        
-        bool invaliid = false;
-        
-        do
+        static void Main()
         {
-            Console.Write("Hello {0}! Are you ready to play Who Wants to be a Millionaire? Y/N: ", 
-                                theplayer.userName.Trim());
+            int count = 0;
+            Console.WriteLine("Who Wants to be A Millionaire");
+            Console.Write("Enter your name: ");
+            string playerName = Console.ReadLine();
+            string userInput;
             
-            string response = Console.ReadLine();
+            bool stillInTheGame = true;
+            bool walkAway = false;
+                    
+            Player theplayer = new Player(playerName);
             
-            if(response.ToLower() == "n")
+            bool invaliid = false;
+            
+            do
             {
-                return;
-            }   
-            else if(response.ToLower() == "y")
-            {
+                Console.Write("Hello {0}! Are you ready to play Who Wants to be a Millionaire? Y/N: ", 
+                                    theplayer.userName.Trim());
                 
-            
-                do
-                {                   
-                    Console.Clear();  
-                    Console.WriteLine("------------------------------------------------------------------------------------");
-                    Console.WriteLine(theplayer.money.ToString());
-                    Console.WriteLine("------------------------------------------------------------------------------------");
-                    Console.WriteLine(theplayer.userLifeLines.LifeLinesLeft());
-                    Console.WriteLine("------------------------------------------------------------------------------------");
-                    Console.WriteLine(theplayer.question.ToString());
-                    Console.WriteLine("------------------------------------------------------------------------------------");
-                    Console.WriteLine("Press (4) to walk away");
-                    Console.WriteLine("------------------------------------------------------------------------------------");
+                string response = Console.ReadLine();
+                
+                if(response.ToLower() == "n")
+                {
+                    return;
+                }   
+                else if(response.ToLower() == "y")
+                {
                     
-                    userInput      = Console.ReadLine();
-                    walkAway       = theplayer.WalkAway(userInput);
-                    
-                    if(!walkAway)
-                    {
-                        stillInTheGame = theplayer.MarkAnswer(userInput);
+                
+                    do
+                    {                   
+                        Console.Clear();  
+                        Console.WriteLine("------------------------------------------------------------------------------------");
+                        Console.WriteLine(theplayer.money.ToString());
+                        Console.WriteLine("------------------------------------------------------------------------------------");
+                        Console.WriteLine(theplayer.userLifeLines.LifeLinesLeft());
+                        Console.WriteLine("------------------------------------------------------------------------------------");
+                        Console.WriteLine(theplayer.question.ToString());
+                        Console.WriteLine("------------------------------------------------------------------------------------");
+                        Console.WriteLine("Press (4) to walk away");
+                        Console.WriteLine("------------------------------------------------------------------------------------");
                         
-                        if(stillInTheGame)
+                        userInput      = Console.ReadLine();
+                        walkAway       = theplayer.WalkAway(userInput);
+                        
+                        if(!walkAway)
                         {
-                            theplayer.money.CurrentLevel = theplayer.money.CurrentLevel.Next;
-                            Console.WriteLine("You have won yourself ${0}", theplayer.money.CurrentLevel.Amount);
-                            Console.WriteLine();
+                            stillInTheGame = theplayer.MarkAnswer(userInput);
                             
-                            count++;
-                            
-                            do
+                            if(stillInTheGame)
                             {
-                                if(count != 9)
+                                theplayer.money.CurrentLevel = theplayer.money.CurrentLevel.Next;
+                                Console.WriteLine("You have won yourself ${0}", theplayer.money.CurrentLevel.Amount);
+                                Console.WriteLine();
+                                
+                                count++;
+                                
+                                do
                                 {
-                                    Console.WriteLine("Go to the next question? Y/N: ");
-                                    response = Console.ReadLine();
-                                
-                                    if(response.ToLower() == "n")
+                                    if(count != 9)
                                     {
-                                        //To Do Something really cool right here
-                                        return;
+                                        Console.WriteLine("Go to the next question? Y/N: ");
+                                        response = Console.ReadLine();
+                                    
+                                        if(response.ToLower() == "n")
+                                        {
+                                            //To Do Something really cool right here
+                                            return;
+                                        }
+                                        else if(response.ToLower() != "n" && response.ToLower() != "y")
+                                        {
+                                            Console.WriteLine("Invalid Response");
+                                        }
                                     }
-                                    else if(response.ToLower() != "n" && response.ToLower() != "y")
-                                    {
-                                        Console.WriteLine("Invalid Response");
-                                    }
-                                }
-                                
-                            }while (response.ToLower() != "n" && response.ToLower() != "y");
+                                    
+                                }while (response.ToLower() != "n" && response.ToLower() != "y");
+                            }
+                            else    
+                            {
+                                Console.WriteLine("You Leave with ${0}", theplayer.money.CurrentLevel.Group);
+                                Console.WriteLine("GAME OVER !!!");
+                            }
                         }
-                        else    
+                        else
                         {
-                            Console.WriteLine("You Leave with ${0}", theplayer.money.CurrentLevel.Group);
-                            Console.WriteLine("GAME OVER !!!");
+                            return;
                         }
-                    }
-                    else
-                    {
-                        return;
-                    }
-                    
-                    Console.WriteLine("------------------------------------------------------------------------------------");
                         
-                }while (stillInTheGame && count < 9);
+                        Console.WriteLine("------------------------------------------------------------------------------------");
+                            
+                    }while (stillInTheGame && count < 9);
+                }
+                else
+                {
+                    Console.WriteLine("Invalid Response");
+                    invaliid = true;
+                }
             }
-            else
-            {
-                Console.WriteLine("Invalid Response");
-                invaliid = true;
-            }
+            while(invaliid);
+            
         }
-        while(invaliid);
-        
     }
+
 }

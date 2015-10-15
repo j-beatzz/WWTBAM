@@ -15,68 +15,71 @@ using System.IO;
 using System.Diagnostics;
 
 
-class Questions
+namespace WWTBAM 
 {
-    int[] number;
-    int presentQuestion;
-    
-    public Questions()
+    class Questions
     {
-        Random questionNumber = new Random();
-        number = new int[10];
+        int[] number;
+        int presentQuestion;
         
-        for (int i = 0; i < 10; i++)
+        public Questions()
         {
-            if( i < 5 )
+            Random questionNumber = new Random();
+            number = new int[10];
+            
+            for (int i = 0; i < 10; i++)
             {
-                number[i] = questionNumber.Next(1 , 11);
+                if( i < 5 )
+                {
+                    number[i] = questionNumber.Next(1 , 11);
+                    
+                }           
+                else if(i > 5 && i < 8)
+                {
+                   number[i] = questionNumber.Next(10 , 21); 
+                }
+                else 
+                {
+                    number[i] = questionNumber.Next(20 , 31); 
+                }
+            }
+            this.presentQuestion = 0;
+        }
+        
+        public int PresentQuestion
+        {
+            get { return this.presentQuestion;}
+            set { this.presentQuestion = value;}
+        }
+        
+        public string[] GetQuestion
+        {
+            get
+            {
+                StreamReader inStream = new StreamReader("GameQuestions.csv");
+                int loop = 0;
+                string line = "";
+                string[] data = null;
+                while(!inStream.EndOfStream && loop < this.number[this.presentQuestion])
+                {
+                    line = inStream.ReadLine();
+                    loop++;
+                }
                 
-            }           
-            else if(i > 5 && i < 8)
-            {
-               number[i] = questionNumber.Next(10 , 21); 
-            }
-            else 
-            {
-                number[i] = questionNumber.Next(20 , 31); 
+                data = line.Split('>', '#');
+                inStream.Close();
+                
+                return data;
             }
         }
-        this.presentQuestion = 0;
-    }
-    
-    public int PresentQuestion
-    {
-        get { return this.presentQuestion;}
-        set { this.presentQuestion = value;}
-    }
-    
-    public string[] GetQuestion
-    {
-        get
+        
+        public override string ToString()
         {
-            StreamReader inStream = new StreamReader("GameQuestions.csv");
-            int loop = 0;
-            string line = "";
-            string[] data = null;
-            while(!inStream.EndOfStream && loop < this.number[this.presentQuestion])
-            {
-                line = inStream.ReadLine();
-                loop++;
-            }
+            string[] values = this.GetQuestion;
             
-            data = line.Split('>', '#');
-            inStream.Close();
+            string output = string.Format("{0}\n{1}", values[0], values[1]);
             
-            return data;
+            return output;
         }
-    }
-    
-    public override string ToString()
-    {
-        string[] values = this.GetQuestion;
-        
-        string output = string.Format("{0}\n{1}", values[0], values[1]);
-        
-        return output;
     }
 }
